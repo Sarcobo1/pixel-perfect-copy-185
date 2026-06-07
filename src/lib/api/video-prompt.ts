@@ -68,7 +68,25 @@ CORE PRINCIPLES:
 - Avoid generic corporate SaaS copy. Headlines must be SHORT (2–4 words), PUNCHY, and EMOTIONAL.
 - You are a master of typography and 3D space. Use depth, bold contrasts, and asymmetrical layouts where appropriate.
 - CONTENT DENSITY IS CRITICAL: Each scene must be packed with brand-specific information. Do not waste a scene on just 2 words.
-- If the user gives style instructions, follow them EXACTLY. User instructions override everything.`;
+- If the user gives style instructions, follow them EXACTLY. User instructions override everything.
+
+MUSIC FIELD (required at root level):
+Add a "music" object to the JSON root with these fields:
+{
+  "music": {
+    "mood": "energetic | calm | dramatic | uplifting | dark | corporate",
+    "bpm": "slow | medium | fast",
+    "category": "electronic | cinematic | corporate | ambient"
+  }
+}
+Rules for choosing music:
+- Brand technical/professional (SaaS, fintech, B2B) → mood: "corporate", category: "electronic"
+- Brand creative/agency/design → mood: "uplifting", category: "cinematic"
+- Brand bold/sports/gaming → mood: "energetic", category: "electronic"
+- Brand calm/wellness/minimal → mood: "calm", category: "ambient"
+- Dark background scenes dominant → mood: "dramatic", category: "cinematic"
+- Luxury/fashion/beauty brand → mood: "dramatic", category: "cinematic"
+Always include this field. It will be used to fetch matching background music.`;
 
 // ─── USER PROMPT BUILDER ──────────────────────────────────────────────
 export function buildUserPrompt(opts: {

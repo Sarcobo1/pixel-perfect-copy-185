@@ -12,6 +12,65 @@ import type { MotionVideoSchema } from "@/lib/motion/schema";
 import { parseMotionVideoJson, stripJsonFences } from "@/lib/api/parse-video-json";
 import { AnimationRegistry } from "@/lib/motion/AnimationRegistry";
 
+// ─── MUSIC SELECTION ──────────────────────────────────────────────────────────
+
+const MOOD_MAP: Record<string, { q: string; order: string }> = {
+  energetic:  { q: "energetic upbeat",   order: "popular" },
+  calm:       { q: "calm ambient",        order: "popular" },
+  dramatic:   { q: "dramatic cinematic",  order: "popular" },
+  uplifting:  { q: "uplifting inspiring", order: "popular" },
+  dark:       { q: "dark powerful",       order: "popular" },
+  corporate:  { q: "corporate modern",    order: "popular" },
+};
+
+async function fetchMusicFallback(mood: string): Promise<string | null> {
+  const apiKey = process.env.PIXABAY_API_KEY;
+  if (!apiKey) return null;
+  const params = MOOD_MAP[mood] ?? MOOD_MAP.corporate;
+  try {
+    const res = await fetch(
+      `https://pixabay.com/api/videos/music/?key=${apiKey}&q=${encodeURIComponent(params.q)}&order=${params.order}&per_page=10`,
+    );
+    if (!res.ok) return null;
+    const data = await res.json() as { hits?: Array<{ audio: string }> };
+    if (!data.hits?.length) return null;
+    const top = data.hits.slice(0, 5);
+    return top[Math.floor(Math.random() * top.length)].audio;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchMusic(mood: string, category: string): Promise<string | null> {
+  const apiKey = process.env.PIXABAY_API_KEY;
+  if (!apiKey) {
+    console.warn("[Music] PIXABAY_API_KEY not set — skipping music fetch");
+    return null;
+  }
+  const params = MOOD_MAP[mood] ?? MOOD_MAP.corporate;
+  try {
+    const res = await fetch(
+      `https://pixabay.com/api/videos/music/?key=${apiKey}&q=${encodeURIComponent(params.q)}&category=${category}&order=${params.order}&per_page=20`,
+    );
+    if (!res.ok) {
+      console.warn(`[Music] Pixabay error ${res.status}, trying fallback`);
+      return fetchMusicFallback(mood);
+    }
+    const data = await res.json() as { hits?: Array<{ audio: string }> };
+    if (!data.hits?.length) {
+      console.log("[Music] No results with category, trying fallback");
+      return fetchMusicFallback(mood);
+    }
+    const top5 = data.hits.slice(0, 5);
+    const track = top5[Math.floor(Math.random() * top5.length)];
+    console.log(`[Music] Selected track for mood="${mood}" category="${category}"`);
+    return track.audio;
+  } catch (err) {
+    console.warn("[Music] Fetch failed (non-fatal):", err);
+    return null;
+  }
+}
+
 // ─── ANIMATION SELF-EXTENSION HELPERS ─────────────────────────────────────────
 
 function findUnknownAnimations(schema: MotionVideoSchema): Array<{ name: string; type: "headline" | "transition" }> {
@@ -334,7 +393,6 @@ export const generateVideoJson = createServerFn({ method: "POST" })
 
     const basePalette = PREMIUM_PALETTES[data.palette ?? "RetroElectric"] || PREMIUM_PALETTES.CloudDancer;
     schema.palette = { ...basePalette, ...(schema.palette || {}) };
-    // AI has full control over colors, no forced text colors
 
     // Inject logo if provided
     if (data.logoDataUrl) {
@@ -350,6 +408,18 @@ export const generateVideoJson = createServerFn({ method: "POST" })
       schema.aspectRatio = data.aspectRatio;
       schema.aspect_ratio = data.aspectRatio;
     }
+
+    // ── Music selection ────────────────────────────────────────────────────
+    // Runs in parallel with no blocking — non-fatal if Pixabay key is missing
+    const musicMeta = schema.music;
+    if (musicMeta) {
+      const musicUrl = await fetchMusic(musicMeta.mood, musicMeta.category);
+      if (musicUrl) {
+        schema.musicUrl = musicUrl;
+        console.log(`[Music] Attached track: ${musicUrl.slice(0, 60)}…`);
+      }
+    }
+    // ──────────────────────────────────────────────────────────────────────
 
     const brandName =
       schema.brandName ||

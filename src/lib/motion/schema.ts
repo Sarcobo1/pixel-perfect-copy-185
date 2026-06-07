@@ -154,6 +154,13 @@ export const SceneSchema = z.object({
   particleBurst: z.boolean().default(false),
 });
 
+// ─── MUSIC METADATA ──────────────────────────────────────
+export const MusicSchema = z.object({
+  mood: z.enum(["energetic", "calm", "dramatic", "uplifting", "dark", "corporate"]).default("corporate"),
+  bpm: z.enum(["slow", "medium", "fast"]).default("medium"),
+  category: z.enum(["electronic", "cinematic", "corporate", "ambient"]).default("corporate"),
+});
+
 // ─── CUSTOM (DYNAMIC) ANIMATION ENTRIES ──────────────────
 export const CustomAnimationSchema = z.object({
   name: z.string(),
@@ -189,6 +196,8 @@ export const MotionVideoSchema = z.object({
   logoUrl: z.string().optional(),
   scenes: z.array(SceneSchema).min(3).max(10),
   customAnimations: z.array(CustomAnimationSchema).optional(),
+  music: MusicSchema.optional(),
+  musicUrl: z.string().optional(),
 });
 
 export type MotionVideoSchema = z.infer<typeof MotionVideoSchema>;
