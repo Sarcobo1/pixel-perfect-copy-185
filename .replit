@@ -9,6 +9,7 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
+PIXABAY_API_KEY = "56195538-2ef981256649e55a3f82697b9"
 
 [workflows]
 runButton = "Project"
