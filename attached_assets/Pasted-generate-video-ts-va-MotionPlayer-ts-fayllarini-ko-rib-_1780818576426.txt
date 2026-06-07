@@ -1,0 +1,61 @@
+generate-video.ts va MotionPlayer.ts fayllarini ko'rib chiq.
+Quyidagi "self-extending animation system" ni implement qil.
+
+MAQSAD:
+AI yangi animatsiya nomi taklif qilganda tizim uni o'zi 
+implement qilib, register qilib, ishlatishi kerak.
+Hech qachon "Invalid enum value" xatosi bo'lmasin.
+
+━━━ 1. AnimationRegistry.ts yaratish ━━━
+
+src/lib/motion/AnimationRegistry.ts faylini yaratib,
+quyidagi imkoniyatlarni implement qil:
+
+- register(name, { fn, type, description }) — qo'shish
+- has(name) → boolean — mavjudmi?
+- playHeadline(name, element) — headline ijro
+- playTransition(name, outEl, inEl) — transition ijro
+- getList(type?) → string[] — ro'yxat (AI ga berish uchun)
+- registerFromCode(name, type, jsCode) — AI kodini dinamik register
+
+Mavjud barcha animatsiyalarni startup da register qil.
+Fallback: noma'lum animatsiya → 'typewriter' yoki 'fade'.
+
+━━━ 2. generate-video.ts ni yangilash ━━━
+
+generateVideo() funksiyasini shu tartibda qayta yoz:
+
+1. Registry.getList() orqali mavjud animatsiyalar ro'yxatini ol
+2. System promptga shu ro'yxatni qo'sh + "yangi taklif qilsang ham bo'ladi"
+3. AI sxema qaytargandan keyin findUnknownAnimations() chaqir
+4. Yangi animatsiya topilsa → implementNewAnimations() bilan AI dan kod so'ra
+5. Registry.registerFromCode() bilan ro'yxatga qo'sh
+6. Shundan keyin render boshlash
+
+━━━ 3. implementNewAnimations() prompt ━━━
+
+AI dan yangi animatsiya kodi so'raganda shu system prompt ishlat:
+
+"Sen motion graphics muhandisisisan. Quyidagi animatsiyani
+vanilla JS + CSS bilan implement qil. GSAP yo'q.
+requestAnimationFrame ishlatgin.
+Funksiya: (element, opts) => { ... } ko'rinishida.
+Faqat JSON qaytargin: { animations: [{ name, type, jsCode }] }"
+
+━━━ 4. Zod sxemani yangilash ━━━
+
+headlineAnimation va transition maydonlarini z.string() ga o'zgartir
+(z.enum emas) — chunki endi istalgan nom valid:
+
+headlineAnimation: z.string().default('typewriter')
+transition: z.string().default('fade')
+
+Validation Registry.has() orqali runtime da bo'ladi,
+Zod schema vaqtida emas.
+
+━━━ NATIJA ━━━
+- AI "quantum_dissolve" yoki "hologram_reveal" taklif qilsa
+- Tizim "bu animatsiya yo'q" deb AI dan kod so'raydi  
+- Avtomatik register qiladi
+- Video render bo'ladi
+- Keyingi videoda bu animatsiya allaqachon mavjud bo'ladi
