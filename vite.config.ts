@@ -158,7 +158,7 @@ function generateStreamDevPlugin() {
 export default defineConfig({
   plugins: [
     tailwindcss(),
-    tsconfigPaths(),
+    tsconfigPaths({ ignoreConfigErrors: true }),
     generateStreamDevPlugin(),
     tanstackStart({
       server: { entry: "src/server.ts" },
