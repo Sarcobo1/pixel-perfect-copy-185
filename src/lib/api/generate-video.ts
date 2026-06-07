@@ -10,6 +10,63 @@ import {
 } from "@/lib/api/video-prompt";
 import type { MotionVideoSchema } from "@/lib/motion/schema";
 import { parseMotionVideoJson, stripJsonFences } from "@/lib/api/parse-video-json";
+import { AnimationRegistry } from "@/lib/motion/AnimationRegistry";
+
+// ─── ANIMATION SELF-EXTENSION HELPERS ─────────────────────────────────────────
+
+function findUnknownAnimations(schema: MotionVideoSchema): Array<{ name: string; type: "headline" | "transition" }> {
+  const unknowns = new Map<string, "headline" | "transition">();
+  for (const scene of schema.scenes) {
+    if (scene.headlineAnimation && !AnimationRegistry.has(scene.headlineAnimation)) {
+      unknowns.set(scene.headlineAnimation, "headline");
+    }
+    for (const key of ["transition", "transition_in", "transition_out"] as const) {
+      const val = scene[key];
+      if (val && !AnimationRegistry.has(val)) {
+        unknowns.set(val, "transition");
+      }
+    }
+  }
+  if (schema.globalAnimation && !AnimationRegistry.has(schema.globalAnimation)) {
+    unknowns.set(schema.globalAnimation, "headline");
+  }
+  return [...unknowns.entries()].map(([name, type]) => ({ name, type }));
+}
+
+const IMPL_SYSTEM_PROMPT = `You are a motion graphics engineer. Implement the requested animations using vanilla JS only — no GSAP, no libraries.
+Use requestAnimationFrame for timing. 
+Each animation function signature must be EXACTLY:
+  (element, opts) => { /* your code here */ }
+where element is an HTMLElement and opts = { duration?: number, delay?: number, color?: string }.
+Return ONLY valid JSON, no markdown, no explanation.
+Format: { "animations": [ { "name": "...", "type": "headline"|"transition", "jsCode": "...", "description": "..." } ] }`;
+
+async function implementNewAnimations(
+  unknowns: Array<{ name: string; type: "headline" | "transition" }>,
+): Promise<void> {
+  if (unknowns.length === 0) return;
+  const list = unknowns.map((u) => `- name: "${u.name}", type: "${u.type}"`).join("\n");
+  const userMsg = `Implement these animations:\n${list}\n\nReturn JSON with all implementations.`;
+
+  try {
+    const raw = await callOpenRouter({
+      model: "qwen3.7-plus",
+      temperature: 0.7,
+      max_tokens: 3000,
+      messages: [
+        { role: "system", content: IMPL_SYSTEM_PROMPT },
+        { role: "user", content: userMsg },
+      ],
+    });
+    const cleaned = raw.replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(cleaned) as { animations: Array<{ name: string; type: "headline" | "transition"; jsCode: string; description?: string }> };
+    for (const anim of parsed.animations || []) {
+      AnimationRegistry.registerFromCode(anim.name, anim.type, anim.jsCode, anim.description);
+    }
+  } catch (err) {
+    console.warn("[AnimationRegistry] Failed to implement new animations (non-fatal):", err);
+  }
+}
 
 
 export const generateVideo = createServerFn({ method: "POST" })
@@ -148,6 +205,11 @@ export const generateVideoJson = createServerFn({ method: "POST" })
       brandInfo = `Business: ${description}. No website data available — INVENT a premium brand story around this topic in the style of Apple, Stripe, or Nike.`;
     };
 
+    // Build animation hint list for the AI prompt
+    const headlineAnims = AnimationRegistry.getList("headline").map((a) => a.name);
+    const transitionAnims = AnimationRegistry.getList("transition").map((a) => a.name);
+    const animHint = `\n\nAVAILABLE HEADLINE ANIMATIONS: ${headlineAnims.join(", ")}\nAVAILABLE TRANSITIONS: ${transitionAnims.join(", ")}\nYou may also PROPOSE new animation names — the system will auto-implement them.`;
+
     const availableLayouts = [
       "center_hero",
       "cards_3",
@@ -209,7 +271,7 @@ export const generateVideoJson = createServerFn({ method: "POST" })
     }
 
     const userPrompt = buildUserPrompt({
-      brandInfo,
+      brandInfo: brandInfo + animHint,
       palette: data.palette ?? "CloudDancer",
       socialLine,
       brandUrl: data.brandUrl,
@@ -246,6 +308,29 @@ export const generateVideoJson = createServerFn({ method: "POST" })
         }
       }
     }
+
+    // ── Self-extending animation system ───────────────────────────────────────
+    // Find any animation names the AI proposed that aren't in the registry,
+    // ask AI to implement them, register + embed in schema for the client.
+    const unknownAnims = findUnknownAnimations(schema);
+    if (unknownAnims.length > 0) {
+      console.log(`[AnimationRegistry] Found ${unknownAnims.length} unknown animation(s):`, unknownAnims.map((a) => a.name));
+      await implementNewAnimations(unknownAnims);
+      // Embed all newly-registered custom animations into the schema so MotionPlayer can use them
+      const customEntries = unknownAnims
+        .map(({ name, type }) => {
+          const code = AnimationRegistry.getCode(name);
+          const entry = AnimationRegistry.getEntry(name);
+          if (!code) return null;
+          return { name, type, jsCode: code, description: entry?.description ?? "" };
+        })
+        .filter(Boolean) as Array<{ name: string; type: "headline" | "transition"; jsCode: string; description: string }>;
+      if (customEntries.length > 0) {
+        schema.customAnimations = customEntries;
+        console.log(`[AnimationRegistry] Embedded ${customEntries.length} custom animation(s) into schema.`);
+      }
+    }
+    // ─────────────────────────────────────────────────────────────────────────
 
     const basePalette = PREMIUM_PALETTES[data.palette ?? "RetroElectric"] || PREMIUM_PALETTES.CloudDancer;
     schema.palette = { ...basePalette, ...(schema.palette || {}) };

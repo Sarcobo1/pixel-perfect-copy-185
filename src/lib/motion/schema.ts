@@ -103,25 +103,7 @@ export const SceneSchema = z.object({
   zoomLabel: z.string().optional(),     // e.g. "Active Users"
   zoomPrefix: z.string().optional(),    // e.g. "$"
   zoomSuffix: z.string().optional(),    // e.g. "%"
-  headlineAnimation: z.enum([
-    "slam_drop",
-    "waterfall",
-    "kinetic_scale",
-    "glitch_reveal",
-    "clip_wipe",
-    "tracking_stretch",
-    "scale_bounce",
-    "char_shatter",
-    "blur_slide",
-    "matte_reveal",
-    "flicker_glitch",
-    "typewriter",
-    "elastic_pop",
-    "perspective_fly",
-    "wave_text",
-    "3d_flip",
-    "scramble_text",
-  ]).default("slam_drop"),
+  headlineAnimation: z.string().default("slam_drop"),
   bgVariant: z.enum(["primary", "surface", "accent", "gradient"]).default("primary"),
   bgMesh: z.boolean().default(true),
   bgParticles: z.enum(["none", "dot_grid", "trail", "sparks", "snow", "rain"]).default("none"),
@@ -134,35 +116,9 @@ export const SceneSchema = z.object({
     "pan_right",
     "shake",
   ]).default("none"),
-  transition: z.enum([
-    "fade",
-    "slide_up",
-    "scale_punch",
-    "blur_dissolve",
-    "clip_wipe",
-    "wipe_right",
-    "wipe_left",
-    "depth_push",
-    "zoom_blur",
-    "chromatic_split",
-    "slide_down",
-    "scale_out",
-    "rotate_out",
-  ]).default("fade"),
-  transition_in: z.enum([
-    "fade",
-    "slide_up",
-    "scale_punch",
-    "blur_dissolve",
-    "clip_wipe",
-  ]).optional(),
-  transition_out: z.enum([
-    "fade",
-    "slide_up",
-    "scale_punch",
-    "blur_dissolve",
-    "clip_wipe",
-  ]).optional(),
+  transition: z.string().default("fade"),
+  transition_in: z.string().optional(),
+  transition_out: z.string().optional(),
   soundOnEnter: z.enum([
     "none",
     "whoosh",
@@ -198,6 +154,14 @@ export const SceneSchema = z.object({
   particleBurst: z.boolean().default(false),
 });
 
+// ─── CUSTOM (DYNAMIC) ANIMATION ENTRIES ──────────────────
+export const CustomAnimationSchema = z.object({
+  name: z.string(),
+  type: z.enum(["headline", "transition"]),
+  jsCode: z.string(),
+  description: z.string().optional(),
+});
+
 // ─── MAIN SCHEMA ─────────────────────────────────────────
 export const MotionVideoSchema = z.object({
   version: z.literal("1.0"),
@@ -224,6 +188,7 @@ export const MotionVideoSchema = z.object({
   globalAnimation: z.string().default("slam_drop"),
   logoUrl: z.string().optional(),
   scenes: z.array(SceneSchema).min(3).max(10),
+  customAnimations: z.array(CustomAnimationSchema).optional(),
 });
 
 export type MotionVideoSchema = z.infer<typeof MotionVideoSchema>;

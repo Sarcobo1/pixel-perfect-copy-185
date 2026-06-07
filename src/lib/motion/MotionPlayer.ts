@@ -233,7 +233,15 @@ export class MotionPlayer {
 ${this.schema.scenes.map((s, i) => this.renderScene(s, i)).join("\n")}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script>window.__motionSchema=${JSON.stringify(this.schema)};window.__timelines=window.__timelines||{};</script>
+<script>
+window.__motionSchema=${JSON.stringify(this.schema)};
+window.__timelines=window.__timelines||{};
+window.__sota_animations=${JSON.stringify(
+  Object.fromEntries(
+    (this.schema.customAnimations || []).map((a: { name: string; jsCode: string }) => [a.name, a.jsCode])
+  )
+)};
+</script>
 </body></html>`;
   }
 
@@ -1079,12 +1087,66 @@ ${this.schema.scenes.map((s, i) => this.renderScene(s, i)).join("\n")}
         }, t - 0.35);
       },
     };
+    // ── Custom (dynamically registered) transition fallback ─────────────────
+    if (!transitions[type]) {
+      const customAnims: Record<string, string> = (window as any).__sota_animations ?? {};
+      if (customAnims[type]) {
+        try {
+          const fn = new Function("el", "direction", "start", "overlap", "tl", `
+            try {
+              const animFn = ${customAnims[type]};
+              animFn(document.querySelector(el) || document.body, { duration: overlap, delay: 0 });
+            } catch(e) { console.warn('[CustomTransition] runtime error:', e); }
+          `);
+          fn(selector, direction, start, overlap, this.tl);
+        } catch (e) {
+          console.warn("[AnimationRegistry] Failed to run custom transition, using fade fallback:", e);
+          if (direction === "out") {
+            this.tl.to(selector, { opacity: 0, duration: overlap, ease: sharp }, start);
+          } else {
+            this.tl.fromTo(selector, { opacity: 0 }, { opacity: 1, duration: overlap + 0.1 }, start);
+          }
+        }
+      } else {
+        // Unknown transition with no implementation — graceful fade fallback
+        if (direction === "out") {
+          this.tl.to(selector, { opacity: 0, duration: overlap }, start);
+        } else {
+          this.tl.fromTo(selector, { opacity: 0 }, { opacity: 1, duration: overlap + 0.1 }, start);
+        }
+      }
+      return;
+    }
+    // ─────────────────────────────────────────────────────────────────────────
     transitions[type]?.();
   }
 
   // ── TEXT ANIMATIONS ───────────────────────────────────
   private animateText(words: NodeListOf<Element>, anim: string, t: number, gsap: any): void {
     if (!words.length) return;
+
+    // ── Custom (dynamically registered) animation check ──────────────────────
+    const customAnims: Record<string, string> = (window as any).__sota_animations ?? {};
+    if (customAnims[anim]) {
+      try {
+        // jsCode is a function body: (element, opts) => { ... }
+        // We adapt it to operate on all word elements via GSAP timeline
+        const fn = new Function("words", "tl", "t", "gsap", `
+          try {
+            const animFn = ${customAnims[anim]};
+            Array.from(words).forEach(function(el, i) {
+              animFn(el, { duration: 0.7, delay: i * 0.08, color: getComputedStyle(el).color });
+            });
+          } catch(e) { console.warn('[CustomAnim] runtime error:', e); }
+        `);
+        fn(words, this.tl, t, gsap);
+        return;
+      } catch (e) {
+        console.warn("[AnimationRegistry] Failed to run custom headline animation, falling back:", e);
+      }
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     // Apple-quality bezier curves for every animation
     const apple  = "cubic-bezier(0.16, 1, 0.3, 1)";
     const bounce = "cubic-bezier(0.34, 1.56, 0.64, 1)";
