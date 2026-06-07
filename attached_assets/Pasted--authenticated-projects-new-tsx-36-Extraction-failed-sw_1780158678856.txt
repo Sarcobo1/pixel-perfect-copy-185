@@ -1,0 +1,611 @@
+
+_authenticated.projects.new.tsx:36 Extraction failed, switching to fallback: Error: OpenRouter API error: 404 {"error":{"message":"No endpoints found for mistralai/mistral-small-3.2-24b-instruct:free.","code":404},"user_id":"user_3ERij4I2J0zdk7Zhwx5X60cFrDD"}
+    at Object.deserialize (@tanstack_router-core.js?v=b11ef71f:4092:12)
+    at deserializePlugin (chunk-NFSYDNUR.js?v=b11ef71f:2437:18)
+    at deserialize (chunk-NFSYDNUR.js?v=b11ef71f:2633:14)
+    at assignProperty (chunk-NFSYDNUR.js?v=b11ef71f:2268:7)
+    at deserializeProperties (chunk-NFSYDNUR.js?v=b11ef71f:2299:7)
+    at deserializeObject (chunk-NFSYDNUR.js?v=b11ef71f:2310:3)
+    at deserialize (chunk-NFSYDNUR.js?v=b11ef71f:2606:14)
+    at deserializeTop (chunk-NFSYDNUR.js?v=b11ef71f:2665:12)
+    at fromCrossJSON (chunk-NFSYDNUR.js?v=b11ef71f:4258:10)
+    at getResponse (serverFnFetcher.js?v=b11ef71f:121:18)
+err @ _authenticated.projects.new.tsx:36
+Promise.catch
+(anonymous) @ _authenticated.projects.new.tsx:35
+executeDispatch @ react-dom_client.js?v=b11ef71f:13622
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+processDispatchQueue @ react-dom_client.js?v=b11ef71f:13658
+(anonymous) @ react-dom_client.js?v=b11ef71f:14071
+batchedUpdates$1 @ react-dom_client.js?v=b11ef71f:2626
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=b11ef71f:13763
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16784
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<form>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b11ef71f:247
+NewProjectPage @ _authenticated.projects.new.tsx:130
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<NewProjectPage>
+exports.createElement @ chunk-EMAOOZFV.js?v=b11ef71f:793
+Lazy @ lazyRouteComponent.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<Lazy>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+(anonymous) @ Match.js?v=b11ef71f:199
+mountMemo @ react-dom_client.js?v=b11ef71f:6527
+useMemo @ react-dom_client.js?v=b11ef71f:18709
+exports.useMemo @ chunk-EMAOOZFV.js?v=b11ef71f:947
+MatchInnerImpl @ Match.js?v=b11ef71f:197
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5654
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchInnerImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchView @ Match.js?v=b11ef71f:101
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchView>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchImpl @ Match.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+OutletImpl @ Match.js?v=b11ef71f:279
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<OutletImpl>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b11ef71f:247
+ProjectsPage @ _authenticated.projects.tsx:31
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<ProjectsPage>
+exports.createElement @ chunk-EMAOOZFV.js?v=b11ef71f:793
+Lazy @ lazyRouteComponent.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<Lazy>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+(anonymous) @ Match.js?v=b11ef71f:199
+mountMemo @ react-dom_client.js?v=b11ef71f:6527
+useMemo @ react-dom_client.js?v=b11ef71f:18709
+exports.useMemo @ chunk-EMAOOZFV.js?v=b11ef71f:947
+MatchInnerImpl @ Match.js?v=b11ef71f:197
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5654
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchInnerImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchView @ Match.js?v=b11ef71f:101
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchView>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchImpl @ Match.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+OutletImpl @ Match.js?v=b11ef71f:279
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<OutletImpl>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b11ef71f:247
+AuthenticatedLayout @ _authenticated.tsx:13
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<AuthenticatedLayout>
+exports.createElement @ chunk-EMAOOZFV.js?v=b11ef71f:793
+Lazy @ lazyRouteComponent.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<Lazy>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+(anonymous) @ Match.js?v=b11ef71f:199
+mountMemo @ react-dom_client.js?v=b11ef71f:6527
+useMemo @ react-dom_client.js?v=b11ef71f:18709
+exports.useMemo @ chunk-EMAOOZFV.js?v=b11ef71f:947
+MatchInnerImpl @ Match.js?v=b11ef71f:197
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5654
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchInnerImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchView @ Match.js?v=b11ef71f:101
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchView>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchImpl @ Match.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+flushSyncWork$1 @ react-dom_client.js?v=b11ef71f:12076
+dispatchEvent @ react-dom_client.js?v=b11ef71f:16823
+dispatchDiscreteEvent @ react-dom_client.js?v=b11ef71f:16765
+<MatchImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+OutletImpl @ Match.js?v=b11ef71f:279
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<OutletImpl>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b11ef71f:247
+RootComponent @ __root.tsx:118
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<RootComponent>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+(anonymous) @ Match.js?v=b11ef71f:199
+mountMemo @ react-dom_client.js?v=b11ef71f:6527
+useMemo @ react-dom_client.js?v=b11ef71f:18709
+exports.useMemo @ chunk-EMAOOZFV.js?v=b11ef71f:947
+MatchInnerImpl @ Match.js?v=b11ef71f:197
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5654
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<MatchInnerImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchView @ Match.js?v=b11ef71f:101
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<MatchView>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchImpl @ Match.js?v=b11ef71f:45
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+updateSimpleMemoComponent @ react-dom_client.js?v=b11ef71f:7264
+updateMemoComponent @ react-dom_client.js?v=b11ef71f:7218
+beginWork @ react-dom_client.js?v=b11ef71f:8786
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<MatchImpl>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+MatchesInner @ Matches.js?v=b11ef71f:28
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<MatchesInner>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+Matches @ Matches.js?v=b11ef71f:19
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<Matches>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+RouterProvider @ RouterProvider.js?v=b11ef71f:41
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<RouterProvider>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+children @ StartClient.js?t=1780158272188&v=b11ef71f:10
+AwaitInner @ awaited.js?v=b11ef71f:28
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<AwaitInner>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+Await @ awaited.js?v=b11ef71f:19
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<Await>
+exports.jsx @ chunk-WWEA4JLO.js?v=b11ef71f:247
+StartClient @ StartClient.js?t=1780158272188&v=b11ef71f:8
+react_stack_bottom_frame @ react-dom_client.js?v=b11ef71f:18509
+renderWithHooksAgain @ react-dom_client.js?v=b11ef71f:5729
+renderWithHooks @ react-dom_client.js?v=b11ef71f:5665
+updateFunctionComponent @ react-dom_client.js?v=b11ef71f:7475
+beginWork @ react-dom_client.js?v=b11ef71f:8525
+runWithFiberInDEV @ react-dom_client.js?v=b11ef71f:997
+performUnitOfWork @ react-dom_client.js?v=b11ef71f:12561
+workLoopSync @ react-dom_client.js?v=b11ef71f:12424
+renderRootSync @ react-dom_client.js?v=b11ef71f:12408
+performWorkOnRoot @ react-dom_client.js?v=b11ef71f:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=b11ef71f:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=b11ef71f:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=b11ef71f:13437
+(anonymous) @ react-dom_client.js?v=b11ef71f:13531
+<StartClient>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b11ef71f:247
+(anonymous) @ client.tsx?t=1780158272188:8
+exports.startTransition @ chunk-EMAOOZFV.js?v=b11ef71f:877
+(anonymous) @ client.tsx?t=1780158272188:5Understand this error
+blob:https://f1566817-0e5a-4371-bbd3-9b699e500b6b-00-1sidu04h65wbf.pike.replit.dev/4af590ef-f920-41f4-83e6-22c5a738a0d7:1 An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing.Understand this warning
+VM959 cdn.tailwindcss.com:64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ VM959 cdn.tailwindcss.com:64
+(anonymous) @ VM959 cdn.tailwindcss.com:64Understand this warning
+VM958 gsap.min.js:10 GSAP target #scene2 .word not found. https://gsap.com
+R @ VM958 gsap.min.js:10
+Tween @ VM958 gsap.min.js:10
+Va @ VM958 gsap.min.js:10
+fromTo @ VM958 gsap.min.js:10
+(anonymous) @ VM962 4af590ef-f920-41f4-83e6-22c5a738a0d7:390Understand this warning
+VM958 gsap.min.js:10 GSAP target  not found. https://gsap.com
+R @ VM958 gsap.min.js:10
+Tween @ VM958 gsap.min.js:10
+set @ VM958 gsap.min.js:10
+_initTween @ VM958 gsap.min.js:10
+Ma @ VM958 gsap.min.js:10
+render @ VM958 gsap.min.js:10
+Tween @ VM958 gsap.min.js:10
+Va @ VM958 gsap.min.js:10
+fromTo @ VM958 gsap.min.js:10
+(anonymous) @ VM962 4af590ef-f920-41f4-83e6-22c5a738a0d7:390Understand this warning
+VM958 gsap.min.js:10 GSAP target .trail-particle not found. https://gsap.com
+R @ VM958 gsap.min.js:10
+Tween @ VM958 gsap.min.js:10
+Va @ VM958 gsap.min.js:10
+to @ VM958 gsap.min.js:10
+(anonymous) @ VM962 4af590ef-f920-41f4-83e6-22c5a738a0d7:495Understand this warning
+60e01403-6bc4-4701-a146-3c15702cbf87:1 An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing.Understand this warning
+VM964 cdn.tailwindcss.com:64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ VM964 cdn.tailwindcss.com:64
+(anonymous) @ VM964 cdn.tailwindcss.com:64Understand this warning
+VM965 gsap.min.js:10 GSAP target #scene2 .word not found. https://gsap.com
+R @ VM965 gsap.min.js:10
+Tween @ VM965 gsap.min.js:10
+Va @ VM965 gsap.min.js:10
+fromTo @ VM965 gsap.min.js:10
+(anonymous) @ VM968 60e01403-6bc4-4701-a146-3c15702cbf87:390Understand this warning
+VM965 gsap.min.js:10 GSAP target  not found. https://gsap.com
+R @ VM965 gsap.min.js:10
+Tween @ VM965 gsap.min.js:10
+set @ VM965 gsap.min.js:10
+_initTween @ VM965 gsap.min.js:10
+Ma @ VM965 gsap.min.js:10
+render @ VM965 gsap.min.js:10
+Tween @ VM965 gsap.min.js:10
+Va @ VM965 gsap.min.js:10
+fromTo @ VM965 gsap.min.js:10
+(anonymous) @ VM968 60e01403-6bc4-4701-a146-3c15702cbf87:390Understand this warning
+VM965 gsap.min.js:10 GSAP target .trail-particle not found. https://gsap.com
+R @ VM965 gsap.min.js:10
+Tween @ VM965 gsap.min.js:10
+Va @ VM965 gsap.min.js:10
+to @ VM965 gsap.min.js:10
+(anonymous) @ VM968 60e01403-6bc4-4701-a146-3c15702cbf87:495Understand this warning
+blob:https://f1566817-0e5a-4371-bbd3-9b699e500b6b-00-1sidu04h65wbf.pike.replit.dev/2d1ddcea-dd98-429a-855c-d2c121becb76:1  GET blob:https://f1566817-0e5a-4371-bbd3-9b699e500b6b-00-1sidu04h65wbf.pike.replit.dev/2d1ddcea-dd98-429a-855c-d2c121becb76 net::ERR_REQUEST_RANGE_NOT_SATISFIABLE
