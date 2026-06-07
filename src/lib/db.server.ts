@@ -1,15 +1,19 @@
 import postgres from "postgres";
 
-let _sql: ReturnType<typeof postgres> | undefined;
-let _dbReady: Promise<void> | undefined;
+declare global {
+  // eslint-disable-next-line no-var
+  var __db: ReturnType<typeof postgres> | undefined;
+  // eslint-disable-next-line no-var
+  var __dbReady: Promise<void> | undefined;
+}
 
 export function getDb() {
-  if (!_sql) {
+  if (!globalThis.__db) {
     const url = process.env.DATABASE_URL;
     if (!url) throw new Error("DATABASE_URL is not set");
-    _sql = postgres(url, { ssl: false });
+    globalThis.__db = postgres(url, { ssl: false });
   }
-  return _sql;
+  return globalThis.__db;
 }
 
 export type ProjectStatus = "draft" | "processing" | "done" | "failed";
@@ -78,11 +82,12 @@ async function _runMigrations() {
     )
   `;
   await sql`CREATE INDEX IF NOT EXISTS projects_owner_idx ON projects(owner_id, updated_at DESC)`;
+  console.log("[db] migrations complete");
 }
 
 export async function initDb() {
-  if (!_dbReady) {
-    _dbReady = _runMigrations();
+  if (!globalThis.__dbReady) {
+    globalThis.__dbReady = _runMigrations();
   }
-  return _dbReady;
+  return globalThis.__dbReady;
 }
