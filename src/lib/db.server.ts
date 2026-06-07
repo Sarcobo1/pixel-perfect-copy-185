@@ -1,6 +1,7 @@
 import postgres from "postgres";
 
 let _sql: ReturnType<typeof postgres> | undefined;
+let _dbReady: Promise<void> | undefined;
 
 export function getDb() {
   if (!_sql) {
@@ -41,7 +42,7 @@ export interface Profile {
   updated_at: string;
 }
 
-export async function initDb() {
+async function _runMigrations() {
   const sql = getDb();
   await sql`
     CREATE TABLE IF NOT EXISTS profiles (
@@ -76,7 +77,12 @@ export async function initDb() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
-  await sql`
-    CREATE INDEX IF NOT EXISTS projects_owner_idx ON projects(owner_id, updated_at DESC)
-  `;
+  await sql`CREATE INDEX IF NOT EXISTS projects_owner_idx ON projects(owner_id, updated_at DESC)`;
+}
+
+export async function initDb() {
+  if (!_dbReady) {
+    _dbReady = _runMigrations();
+  }
+  return _dbReady;
 }
