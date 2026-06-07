@@ -144,6 +144,12 @@ export const generateVideo = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (!process.env.DASHSCOPE_API_KEY) {
+      throw new Error(
+        "AI generation is not configured. Please add your DASHSCOPE_API_KEY secret to enable video generation.",
+      );
+    }
+
     const description =
       data.description?.trim() ||
       data.brandUrl?.trim() ||
@@ -224,6 +230,12 @@ export const generateVideoJson = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (!process.env.DASHSCOPE_API_KEY) {
+      throw new Error(
+        "AI generation is not configured. Please add your DASHSCOPE_API_KEY secret to enable video generation.",
+      );
+    }
+
     const description =
       data.description?.trim() ||
       data.brandUrl?.trim() ||

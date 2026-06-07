@@ -82,11 +82,11 @@ function NewProjectPage() {
         const saved = await createProject({
           data: {
             name: projectName,
-            htmlCode: generatedHtml,
-            brandUrl: url.trim(),
+            html_code: generatedHtml,
+            prompt: url.trim(),
           },
         });
-        if (saved?.id) pid = saved.id;
+        if (saved?.project?.id) pid = saved.project.id;
       } catch (err) {
         console.warn("Failed to save project:", err);
       }
