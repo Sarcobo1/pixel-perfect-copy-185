@@ -1,0 +1,1 @@
+- [Spinning border CSS](spinning-border.md) — `::before` z-index:-1 + isolation:isolate fails; use `@property --angle` + wrapper div for clean spinning glow borders

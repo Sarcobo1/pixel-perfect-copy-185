@@ -1,0 +1,278 @@
+In src/routes/_authenticated.projects.new.tsx and src/lib/api/generate-video.ts,
+add 6 new animation styles to the existing selectors.
+
+═══════════════════════════════════════════════════════
+CHANGE 1 — Add to animations array in new.tsx
+═══════════════════════════════════════════════════════
+
+Add these 6 new items to the existing animations array
+(after the existing 8, total becomes 14):
+
+  {
+    id: "kinetic_typography",
+    name: "Kinetic Typography",
+    desc: "Words fly across screen",
+    icon: "🎬",
+  },
+  {
+    id: "matte_reveal",
+    name: "Matte Reveal",
+    desc: "Slides from behind wall",
+    icon: "🏢",
+  },
+  {
+    id: "typewriter",
+    name: "Typewriter",
+    desc: "Letter by letter reveal",
+    icon: "⌨️",
+  },
+  {
+    id: "scale_bounce",
+    name: "Scale Bounce",
+    desc: "Snaps in with bounce",
+    icon: "🎯",
+  },
+  {
+    id: "flicker_glitch",
+    name: "Flicker Glitch",
+    desc: "Opacity flicker + distortion",
+    icon: "📡",
+  },
+  {
+    id: "tracking_stretch",
+    name: "Tracking Stretch",
+    desc: "Letter spacing cinematic",
+    icon: "✨",
+  },
+
+Also update the grid from grid-cols-4 to grid-cols-4 (keeps 4 columns,
+now 4 rows instead of 2 — auto wraps).
+
+═══════════════════════════════════════════════════════
+CHANGE 2 — Add to ANIMATION_TECHNIQUES in generate-video.ts
+═══════════════════════════════════════════════════════
+
+Add these 6 entries to the ANIMATION_TECHNIQUES object:
+
+  kinetic_typography: `
+PRIMARY TEXT ANIMATION: KINETIC TYPOGRAPHY
+Words are NOT static — they move dynamically ACROSS the screen.
+Implementation:
+  Split headline into individual words as absolutely positioned elements.
+  Each word starts off-screen at a different position and flies through.
+
+  // Word 1: enters from left, exits right
+  tl.fromTo("#word-1",
+    { x: -400, opacity:0, scale:0.8 },
+    { x: 0, opacity:1, scale:1, duration:0.5, ease:"expo.out" }, t
+  )
+  tl.to("#word-1", { x: 400, opacity:0, duration:0.4, ease:"power2.in" }, t+1.2)
+
+  // Word 2: enters from top, exits bottom
+  tl.fromTo("#word-2",
+    { y: -300, opacity:0, rotation:-15 },
+    { y: 0, opacity:1, rotation:0, duration:0.5, ease:"expo.out" }, t+0.3
+  )
+
+  // Word 3: enters from bottom-right, large scale
+  tl.fromTo("#word-3",
+    { x: 300, y: 200, scale:2, opacity:0 },
+    { x: 0, y: 0, scale:1, opacity:1, duration:0.6, ease:"power3.out" }, t+0.5
+  )
+
+  Each word must move in a different direction.
+  Words overlap briefly for visual richness.
+  Use font-size clamp(60px, 8vw, 120px) for impact.
+  Add rotation (-15 to +15 deg) on entry for dynamism.
+  Duration per word on screen: 0.8s to 1.5s before exiting.
+  Background stays dark — words are the only elements moving.`,
+
+  matte_reveal: `
+PRIMARY TEXT ANIMATION: POSITIONAL MATTE REVEAL
+Text slides into view from behind an invisible clipping wall — corporate/premium look.
+Implementation:
+  Every text line has a parent wrapper with overflow:hidden and exact same height as text.
+  Text starts OUTSIDE the clip boundary, slides in cleanly.
+
+  // Structure for each line:
+  // <div class="line-wrap" style="overflow:hidden; height:1.2em; position:relative">
+  //   <div class="line-text" style="position:absolute">YOUR TEXT</div>
+  // </div>
+
+  gsap.fromTo(".line-text",
+    { y: "110%" },
+    {
+      y: "0%",
+      duration: 0.75,
+      ease: "expo.out",
+      stagger: 0.12
+    }
+  )
+
+  // For exit: slide DOWN out of the clip
+  gsap.to(".line-text", {
+    y: "-110%",
+    duration: 0.6,
+    ease: "power3.in",
+    stagger: 0.08
+  })
+
+  Add subtle x offset for corporate diagonal feel:
+    entry: x:"5%" → x:"0%"
+    exit: x:"-5%"
+
+  Use for ALL text: headlines, subtitles, labels, stats.
+  The "wall" is invisible — only the clip boundary matters.
+  Timing: 0.75s entry, 0.6s exit, 0.12s stagger between lines.`,
+
+  typewriter: `
+PRIMARY TEXT ANIMATION: TYPEWRITER EFFECT
+Letters appear one by one left to right — terminal/real-time typing feel.
+Implementation:
+  For each text element:
+  const text = el.textContent;
+  el.textContent = '';
+  let i = 0;
+
+  // GSAP ticker-based typewriter (synced to timeline):
+  const obj = { progress: 0 };
+  tl.to(obj, {
+    progress: 1,
+    duration: text.length * 0.045,  // ~45ms per char
+    ease: "none",
+    onUpdate: function() {
+      const chars = Math.floor(obj.progress * text.length);
+      el.textContent = text.slice(0, chars);
+    }
+  }, startTime);
+
+  Add blinking cursor after last char:
+    el.style.borderRight = "2px solid #a3e635";
+    el.style.animation = "blink 0.7s step-end infinite";
+    @keyframes blink { 50% { border-color: transparent; } }
+  Remove cursor when next scene starts.
+
+  Stagger between multiple lines: 0.3s after previous line finishes.
+  Speed: headlines 45ms/char, subtitles 30ms/char, labels 20ms/char.
+  Add subtle key-tap sound sync comment in code.`,
+
+  scale_bounce: `
+PRIMARY TEXT ANIMATION: POP-UP SCALE BOUNCE
+Text snaps in quickly with overshoot past its final scale — instant attention grab.
+Implementation:
+  gsap.fromTo(".text-el",
+    {
+      scale: 0,
+      opacity: 0,
+      transformOrigin: "center center"
+    },
+    {
+      scale: 1,
+      opacity: 1,
+      duration: 0.45,
+      ease: "back.out(2.5)",  // significant overshoot
+      stagger: 0.08
+    }
+  )
+
+  For extra SNAP feel, add a 2-step sequence:
+  tl.fromTo(el, { scale:0, opacity:0 },
+    { scale:1.15, opacity:1, duration:0.25, ease:"power3.out" }, t)
+  tl.to(el, { scale:1, duration:0.2, ease:"elastic.out(1,0.4)" }, t+0.25)
+
+  Apply to: every word individually (not whole sentence at once).
+  Word stagger: 0.06s — rapid-fire pop sequence.
+  Exit: reverse — scale:0 opacity:0 duration:0.2 ease:"back.in(2)"
+  Add particle burst at each word's center on pop-in.`,
+
+  flicker_glitch: `
+PRIMARY TEXT ANIMATION: FLICKER GLITCH REVEAL
+Rapid opacity flickers + chromatic distortion — edgy tech aesthetic.
+Implementation:
+
+  // Phase 1: Rapid flicker (chaos before reveal)
+  function flicker(el, duration, cb) {
+    const tl = gsap.timeline({ onComplete: cb });
+    const steps = 12;
+    for (let i = 0; i < steps; i++) {
+      tl.to(el, {
+        opacity: i % 2 === 0 ? 1 : 0,
+        duration: duration / steps,
+        ease: "none"
+      });
+    }
+    return tl;
+  }
+
+  // Phase 2: RGB split chromatic aberration
+  function rgbSplit(el) {
+    el.style.textShadow =
+      "3px 0 rgba(255,0,0,0.7), -3px 0 rgba(0,255,255,0.7)";
+    gsap.to(el, {
+      textShadow: "0px 0 rgba(255,0,0,0), 0px 0 rgba(0,255,255,0)",
+      duration: 0.4,
+      ease: "power2.out"
+    });
+  }
+
+  // Phase 3: hue-rotate sweep
+  gsap.fromTo(el,
+    { filter: "hue-rotate(180deg) brightness(2) saturate(3)" },
+    { filter: "hue-rotate(0deg) brightness(1) saturate(1)",
+      duration: 0.35, ease: "power2.out" }
+  )
+
+  Sequence: flicker(0.3s) → rgbSplit → hue-rotate → stable text
+  Between flickers: random x offset ±6px for glitch shake.
+  Stagger between elements: 0.15s.
+  Apply full sequence to each headline.`,
+
+  tracking_stretch: `
+PRIMARY TEXT ANIMATION: TRACKING STRETCH
+Letter-spacing animates from extreme values to normal — cinematic/high-end.
+Implementation:
+
+  // Cinematic open: letters spread from center outward
+  gsap.fromTo(".headline",
+    {
+      letterSpacing: "0.8em",
+      opacity: 0,
+      filter: "blur(8px)"
+    },
+    {
+      letterSpacing: "-0.02em",  // tight, premium
+      opacity: 1,
+      filter: "blur(0px)",
+      duration: 1.2,
+      ease: "expo.out"
+    }
+  )
+
+  // For exit: compress inward (reverse tracking)
+  gsap.to(".headline", {
+    letterSpacing: "-0.1em",
+    opacity: 0,
+    filter: "blur(4px)",
+    duration: 0.6,
+    ease: "power3.in"
+  })
+
+  // Subtitle variant: track OUT (expand to disappear)
+  gsap.fromTo(".subtitle",
+    { letterSpacing: "0em", opacity: 1 },
+    { letterSpacing: "0.5em", opacity: 0, duration: 0.8, ease: "power2.in" }
+  )
+
+  // Premium variant: each word tracks independently
+  words.forEach((word, i) => {
+    tl.fromTo(word,
+      { letterSpacing: "0.4em", opacity:0 },
+      { letterSpacing: "-0.02em", opacity:1,
+        duration:0.9, ease:"expo.out" },
+      startTime + i * 0.2
+    );
+  });
+
+  Use ONLY this animation — no other text reveals.
+  Font: font-weight 700, text-transform: uppercase for max effect.
+  Add subtle scale: 1.05→1 simultaneously with letterSpacing change.`,

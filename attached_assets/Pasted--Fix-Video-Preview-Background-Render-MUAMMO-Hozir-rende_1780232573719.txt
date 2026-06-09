@@ -1,0 +1,301 @@
+# Fix: Video Preview → Background Render
+
+## MUAMMO
+Hozir render paytida ekranga qora overlay chiqib animatsiyani buzib qo'yapti.
+Render iframe sahifani "muzlatib" frame-by-frame olyapti — shu sababli user
+animatsiya o'rniga qotib qolgan ekran ko'ryapti.
+
+## YECHIM
+1. Birinchi — HTML ni live iframe sifatida ko'rsat (animatsiya to'liq ishlaydi)
+2. User "Download video" bosganda — BACKGROUND'da yashirin render qil
+3. Render tugagach — download boshlaydi
+
+---
+
+## CHANGE 1 — src/components/MotionVideoPlayer.tsx ni to'liq almashtir:
+
+```tsx
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Download, Film, Loader2, Maximize2, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
+import {
+  downloadVideoBlob,
+  recordHtmlToVideo,
+  videoExtension,
+} from "@/lib/video-export";
+
+const NATIVE_W = 1920;
+const NATIVE_H = 1080;
+
+interface MotionVideoPlayerProps {
+  htmlCode: string;
+  brandName?: string;
+  autoExport?: boolean;
+  onVideoReady?: (blob: Blob, mimeType: string) => void;
+}
+
+export function MotionVideoPlayer({
+  htmlCode,
+  brandName = "brand-video",
+  autoExport = false,
+  onVideoReady,
+}: MotionVideoPlayerProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportDone, setExportDone] = useState(false);
+  const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
+  const [videoMime, setVideoMime] = useState("video/webm");
+  const [iframeKey, setIframeKey] = useState(0);
+  const [scale, setScale] = useState(1);
+
+  // Scale iframe to container width
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setScale(entry.contentRect.width / NATIVE_W);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Create blob URL for live preview
+  useEffect(() => {
+    if (!htmlCode) return;
+
+    // Inject autoplay script so timeline plays in iframe
+    const autoPlay = `
+<script>
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    if (window.__timelines && window.__timelines['sota-video']) {
+      window.__timelines['sota-video'].play();
+    } else if (window.gsap) {
+      gsap.globalTimeline.play();
+    }
+  }, 200);
+});
+<\/script>`;
+
+    const html = htmlCode.includes("</body>")
+      ? htmlCode.replace("</body>", autoPlay + "</body>")
+      : htmlCode + autoPlay;
+
+    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    setPreviewUrl(url);
+    setPreviewLoading(true);
+    setExportDone(false);
+    setVideoBlob(null);
+    return () => URL.revokeObjectURL(url);
+  }, [htmlCode]);
+
+  // Background render — does NOT touch the visible iframe
+  const runExport = useCallback(async () => {
+    if (!htmlCode || exporting) return;
+    setExporting(true);
+    setExportProgress(0);
+    toast("Rendering video in background… ~2 min", { duration: 6000 });
+
+    try {
+      const { blob, mimeType } = await recordHtmlToVideo(htmlCode, {
+        onProgress: setExportProgress,
+      });
+      setVideoBlob(blob);
+      setVideoMime(mimeType);
+      setExportDone(true);
+      setExportProgress(100);
+      onVideoReady?.(blob, mimeType);
+      toast.success("Video ready! Click Download.");
+
+      // Auto-download
+      const safeName = brandName.replace(/[^\w\-]+/g, "-").toLowerCase();
+      downloadVideoBlob(blob, `${safeName}-flovo`, mimeType);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  }, [htmlCode, exporting, brandName, onVideoReady]);
+
+  const handleDownload = () => {
+    if (!videoBlob) return;
+    const safeName = brandName.replace(/[^\w\-]+/g, "-").toLowerCase();
+    downloadVideoBlob(videoBlob, `${safeName}-flovo`, videoMime);
+    toast.success("Downloaded!");
+  };
+
+  const handleReplay = () => {
+    setIframeKey((k) => k + 1);
+    setPreviewLoading(true);
+  };
+
+  const handleFullscreen = () => iframeRef.current?.requestFullscreen?.();
+
+  const displayH = Math.round(NATIVE_H * scale);
+  const containerStyle = displayH > 0
+    ? { height: displayH }
+    : { aspectRatio: `${NATIVE_W}/${NATIVE_H}` };
+
+  return (
+    <div className="w-full max-w-6xl mx-auto space-y-4">
+      {/* LIVE PREVIEW — always visible, never interrupted */}
+      <div
+        ref={containerRef}
+        className="relative w-full overflow-hidden rounded-2xl border border-border bg-black shadow-xl"
+        style={containerStyle}
+      >
+        {previewLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-canvas z-10">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )}
+
+        {/* Export progress bar — slim, doesn't block preview */}
+        {exporting && (
+          <div className="absolute bottom-0 left-0 right-0 z-20 px-4 pb-3">
+            <div className="flex items-center gap-3 rounded-xl bg-black/70 backdrop-blur-sm px-4 py-2.5">
+              <Film className="h-4 w-4 text-primary animate-pulse shrink-0" />
+              <div className="flex-1">
+                <div className="h-1 w-full overflow-hidden rounded-full bg-white/20">
+                  <div
+                    className="h-full bg-primary transition-all duration-300"
+                    style={{ width: `${exportProgress}%` }}
+                  />
+                </div>
+              </div>
+              <span className="text-xs text-white/70 shrink-0 min-w-[36px] text-right">
+                {Math.round(exportProgress)}%
+              </span>
+            </div>
+          </div>
+        )}
+
+        {previewUrl && scale > 0 && (
+          <iframe
+            key={iframeKey}
+            ref={iframeRef}
+            src={previewUrl}
+            style={{
+              width: NATIVE_W,
+              height: NATIVE_H,
+              border: "none",
+              transformOrigin: "top left",
+              transform: `scale(${scale})`,
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+            title="Motion preview"
+            onLoad={() => setPreviewLoading(false)}
+          />
+        )}
+      </div>
+
+      {/* CONTROLS */}
+      <div className="flex flex-wrap items-center gap-3">
+        {exportDone ? (
+          <button
+            type="button"
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            Download {videoExtension(videoMime).toUpperCase()}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => void runExport()}
+            disabled={exporting || previewLoading}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover disabled:opacity-50 transition-colors"
+          >
+            {exporting ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> Rendering {Math.round(exportProgress)}%</>
+            ) : (
+              <><Film className="h-4 w-4" /> Export as video</>
+            )}
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={handleReplay}
+          disabled={exporting}
+          className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:border-primary disabled:opacity-50 transition-colors"
+        >
+          <RefreshCw className="h-4 w-4" /> Replay
+        </button>
+
+        <button
+          type="button"
+          onClick={handleFullscreen}
+          className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:border-primary transition-colors"
+        >
+          <Maximize2 className="h-4 w-4" /> Fullscreen
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default MotionVideoPlayer;
+```
+
+---
+
+## CHANGE 2 — src/lib/video-export.ts ichida render resolution oshir:
+
+Find these lines:
+```ts
+const RENDER_W = 1280;
+const RENDER_H = 720;
+```
+
+Replace with:
+```ts
+const RENDER_W = 1920;
+const RENDER_H = 1080;
+```
+
+Also find in liveCapture function:
+```ts
+const RENDER_W = 1280, RENDER_H = 720;
+```
+Replace with:
+```ts
+const RENDER_W = 1920, RENDER_H = 1080;
+```
+
+Also increase FPS and bitrate:
+```ts
+const CAPTURE_FPS = 30;  // was 10
+
+videoBitsPerSecond: 20_000_000,  // was 5_000_000
+```
+
+Also improve frame capture quality:
+```ts
+// was: capturedFrames.push(capCanvas.toDataURL("image/jpeg", 0.88));
+capturedFrames.push(capCanvas.toDataURL("image/jpeg", 1.0));
+```
+
+---
+
+## CHANGE 3 — sandbox ni olib tashla (GSAP CDN ishlashi uchun)
+
+In video-export.ts, find:
+```ts
+iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+```
+Replace with:
+```ts
+// No sandbox — needed for CDN scripts (GSAP, html2canvas)
+// HTML is user's own generated content, safe to run without sandbox
+```
+(Just remove the setAttribute line entirely)
+
+In MotionVideoPlayer.tsx the new iframe also has no sandbox attribute — correct.

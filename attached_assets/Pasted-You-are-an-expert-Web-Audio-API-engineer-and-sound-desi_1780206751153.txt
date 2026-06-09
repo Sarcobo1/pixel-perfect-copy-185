@@ -1,0 +1,348 @@
+You are an expert Web Audio API engineer and sound designer.
+Create a complete, production-ready JavaScript sound library that generates
+professional-grade UI and motion sounds using ONLY the Web Audio API —
+no audio files, no external libraries, pure math and synthesis.
+
+TARGET QUALITY: Sounds must feel comparable to Epidemic Sound UI packs —
+layered, warm, with reverb tails, stereo width, and harmonic richness.
+
+═══════════════════════════════════════════════════════
+TECHNICAL REQUIREMENTS
+═══════════════════════════════════════════════════════
+
+Every sound MUST use these nodes where appropriate:
+  - DynamicsCompressorNode  → professional punch and limiting
+  - ConvolverNode           → reverb tail (generate impulse response via code)
+  - StereoPannerNode        → stereo width
+  - WaveShaperNode          → harmonic warmth / saturation
+  - BiquadFilterNode        → tone shaping (multiple cascaded filters)
+  - GainNode                → ADSR envelope (attack, decay, sustain, release)
+  - OscillatorNode          → pitched tones with detune for chorus effect
+
+MANDATORY HELPERS (write these first, reuse across all sounds):
+
+1. createReverb(ctx, seconds, decay) → ConvolverNode
+   Generate impulse response mathematically:
+   function createReverb(ctx, seconds=1.5, decay=2.0) {
+     const len = ctx.sampleRate * seconds;
+     const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+     for (let ch = 0; ch < 2; ch++) {
+       const d = buf.getChannelData(ch);
+       for (let i = 0; i < len; i++) {
+         d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, decay);
+       }
+     }
+     const conv = ctx.createConvolver();
+     conv.buffer = buf;
+     return conv;
+   }
+
+2. createCompressor(ctx, threshold=-18, knee=6, ratio=4, attack=0.003, release=0.15)
+   → DynamicsCompressorNode with those exact params
+
+3. createDistortion(ctx, amount=20) → WaveShaperNode
+   Use cubic soft-clip curve:
+   const curve = new Float32Array(512);
+   for (let i=0; i<512; i++) {
+     const x = i*2/512 - 1;
+     curve[i] = x * (3 + amount) / (1 + amount * Math.abs(x));
+   }
+
+4. createPinkNoise(ctx, duration) → AudioBufferSourceNode
+   Pink noise via Paul Kellett's method:
+   let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+   for each sample:
+     const white = Math.random()*2-1;
+     b0 = 0.99886*b0 + white*0.0555179;
+     b1 = 0.99332*b1 + white*0.0750759;
+     b2 = 0.96900*b2 + white*0.1538520;
+     b3 = 0.86650*b3 + white*0.3104856;
+     b4 = 0.55000*b4 + white*0.5329522;
+     b5 = -0.7616*b5 - white*0.0168980;
+     sample = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.11;
+     b6 = white * 0.115926;
+
+5. adsr(gainNode, ctx, attack, decay, sustain, release, peak=1.0)
+   gainNode.gain.setValueAtTime(0, ctx.currentTime);
+   gainNode.gain.linearRampToValueAtTime(peak, ctx.currentTime + attack);
+   gainNode.gain.linearRampToValueAtTime(sustain*peak, ctx.currentTime + attack + decay);
+   gainNode.gain.setValueAtTime(sustain*peak, ctx.currentTime + attack + decay);
+   gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + attack + decay + release);
+
+6. stereoChorus(ctx, osc, detuneCents=8) → add 2 detuned copies:
+   Create 3 oscillators: base, +detuneCents, -detuneCents
+   Pan them: center, slight left (-0.3), slight right (+0.3)
+   Mix into single output gain
+
+═══════════════════════════════════════════════════════
+SOUNDS TO CREATE — ALL 27
+═══════════════════════════════════════════════════════
+
+For EACH sound write a function: sounds.soundName(ctx) → void
+Signal chain must go: source → processing → compressor → reverb (dry/wet mix) → output
+
+── UI SOUNDS ──
+
+click:
+  Layered: (1) sharp sine 1400→900Hz, 35ms, hard attack
+           (2) white noise burst, highpass 5kHz, 20ms
+           (3) subtle sub thump 80Hz, 15ms
+  Compressor: threshold -12, ratio 6
+  Reverb: 0.3s, very short, wet 8%
+  Stereo: slight center
+  Feel: Mechanical, precise, satisfying
+
+tap:
+  Softer click — sine 900→600Hz, 40ms
+  Add finger warmth: lowpass 3kHz shelf +4dB
+  Pink noise layer, bandpass 1500Hz, 25ms
+  Reverb: 0.4s, wet 12%
+  Feel: Gentle, touchscreen-like
+
+tick:
+  Ultra-short: white noise, highpass 6kHz, 12ms
+  Sine transient 3000Hz, 8ms
+  No reverb
+  Volume: very quiet (0.15 peak)
+  Feel: Clock, metronome, precise
+
+pop:
+  Sub oscillator 200→50Hz, 80ms (the body)
+  Sine 800→200Hz parallel, 60ms (the pop)
+  WaveShaper warmth on sub
+  Reverb: 0.5s, wet 15%
+  Feel: Bubble, soft spring
+
+ping:
+  Pure sine 1600Hz, long decay 800ms
+  Add 2nd harmonic at 3200Hz, quieter (-12dB)
+  3rd harmonic 4800Hz, very quiet (-20dB)
+  Reverb: 1.2s, wet 30% — needs space to breathe
+  Feel: Bell, notification, clean
+
+beep:
+  Sine 880Hz, square wave layer at -20dB (adds buzz)
+  Duration: 120ms flat then release 80ms
+  Light compressor
+  Feel: System alert, digital
+
+confirm:
+  3-note chord: root (440Hz) + major third (554Hz) + fifth (659Hz)
+  Stagger: 0ms, 60ms, 120ms
+  Each note: sine + subtle 2nd harmonic
+  Reverb: 0.8s, wet 20%
+  Fade tail: 400ms
+  Feel: Positive, musical, iOS-like
+
+success:
+  4-note ascending: 440→554→659→880Hz
+  Stagger: 0ms, 80ms, 160ms, 240ms
+  Add sparkle: 2nd harmonic on last note
+  Particle shimmer: high-freq noise burst at 340ms
+  Reverb: 1.0s, wet 25%
+  Feel: Achievement, celebration, warm
+
+error:
+  2-note descending: 300Hz then 220Hz
+  Offset: 0ms, 120ms
+  Sawtooth wave + lowpass 800Hz (buzzy, harsh)
+  Light distortion for edge
+  No reverb (dry = more urgent)
+  Feel: Warning, mistake, clear rejection
+
+notification:
+  2-note: 880Hz then 1108Hz (whole step up)
+  Offset: 0ms, 140ms
+  Sine + slight chorus (detune ±6 cents)
+  Reverb: 0.7s, wet 18%
+  Feel: Message received, friendly
+
+── MOTION SOUNDS ──
+
+whoosh:
+  Pink noise → bandpass sweep: center freq 300→4000Hz over 350ms
+  Stereo pan: L→R sweep simultaneously
+  Pitch envelope on parallel oscillator: 200→2000Hz
+  Attack 20ms, long tail 300ms
+  Reverb: 0.6s, wet 20%
+  Feel: Fast movement, slide in from side
+
+swish:
+  Pink noise → highpass 2500Hz (airy)
+  Amplitude: fast attack (10ms) → fast decay (180ms)
+  Stereo pan: slight right bias
+  No sub content
+  Feel: Light movement, card slide
+
+sweep:
+  Sawtooth oscillator 80→3000Hz over 300ms
+  Lowpass filter tracks oscillator freq × 1.5
+  WaveShaper saturation (amount 15)
+  Parallel pink noise layer, bandpass 1200Hz
+  Reverb: 0.5s, wet 15%
+  Feel: Zoom transition, scale up
+
+flyby:
+  Pink noise, bandpass 1400Hz, Q=3
+  Amplitude bell curve: ramp up 80ms, peak, ramp down 220ms
+  Stereo: hard L → center → hard R pan sweep
+  Pitch layer: 400→1200→400Hz arc
+  Reverb: 0.4s, wet 10%
+  Feel: Object passing by at speed
+
+impact:
+  Layer 1: Sub thump — sine 120→30Hz, 200ms, WaveShaper heavy
+  Layer 2: Body — pink noise, lowpass 600Hz, 150ms
+  Layer 3: Attack click — white noise, highpass 4kHz, 25ms
+  Compressor: threshold -6, ratio 8, fast attack 1ms
+  Reverb: 1.0s, wet 12%
+  Feel: Heavy object landing, cinematic hit
+
+hit:
+  Medium impact — sine 90→40Hz, 150ms
+  Noise layer: lowpass 800Hz, 100ms  
+  Light distortion on sub
+  Reverb: 0.5s, wet 10%
+  Feel: Punch, medium force
+
+bounce:
+  5 micro-bounces with exponential decay in amplitude and pitch:
+  Bounce 1: t=0ms,   freq=350Hz, amp=0.45
+  Bounce 2: t=110ms, freq=310Hz, amp=0.28
+  Bounce 3: t=195ms, freq=280Hz, amp=0.16
+  Bounce 4: t=260ms, freq=260Hz, amp=0.09
+  Bounce 5: t=305ms, freq=245Hz, amp=0.05
+  Each bounce: sine, 60ms decay, WaveShaper warmth
+  Reverb: 0.4s, wet 8%
+  Feel: Rubber ball, spring physics
+
+drop:
+  Sine 700→60Hz over 220ms (pitch fall)
+  Velocity curve: ease-in (slow start, fast fall)
+  Sub emphasis: WaveShaper amount 25
+  Impact at end: noise burst 20ms, lowpass 400Hz
+  Reverb: 0.6s, wet 12%
+  Feel: Object falling and landing
+
+snap:
+  White noise, highpass 4000Hz, 35ms (the crack)
+  Sub transient: sine 150Hz, 20ms (the body)
+  Compressor: fast attack 0.5ms, high ratio 10
+  No reverb (keep it tight)
+  Feel: Finger snap, crisp
+
+punch:
+  Sub sine 100→25Hz, 130ms, heavy WaveShaper (amount 40)
+  Attack transient: noise burst 15ms, bandpass 800Hz
+  DynamicsCompressor: threshold -4, ratio 12, attack 0.5ms
+  Reverb: 0.3s, wet 6% (just a hint of room)
+  Feel: Boxing, force, impact frame
+
+── APPLE PREMIUM STYLE ──
+
+softClick:
+  Sine 2200→1600Hz, 28ms
+  Extreme smoothness: attack 2ms, gentle curve
+  Lowpass 3500Hz to remove harshness
+  Reverb: 0.25s, wet 5%
+  Volume: 0.10 peak (very quiet)
+  Feel: MacBook trackpad, refined
+
+glassTap:
+  Sine 2800Hz, long decay 350ms
+  2nd harmonic 5600Hz at -10dB
+  BiquadFilter: peaking at 3500Hz, +6dB (glassy resonance)
+  Stereo chorus: detune ±4 cents
+  Reverb: 0.6s, wet 22%
+  Feel: Crystal, iPhone tap
+
+lightPop:
+  Sine 260→75Hz, 70ms (very soft sub)
+  Lowpass 1200Hz (muffled, warm)
+  WaveShaper: amount 5 (barely any)
+  Reverb: 0.4s, wet 18%
+  Volume: 0.18 peak
+  Feel: Soft bubble, gentle spring
+
+airyWhoosh:
+  Pink noise, highpass 3500Hz (only air, no bass)
+  Amplitude: slow attack 80ms, slow decay 350ms
+  Stereo pan: slight L→R drift
+  Volume: 0.18 peak
+  Reverb: 1.0s, wet 35% (spacious)
+  Feel: Gentle breeze, Apple card flip
+
+softImpact:
+  Sine 110→45Hz, 120ms
+  Lowpass 600Hz (no harsh content)
+  WaveShaper: amount 8
+  Reverb: 0.5s, wet 14%
+  Volume: 0.22 peak
+  Feel: Soft landing, padded
+
+ambientTick:
+  Sine 2400Hz, 40ms, ultra-quiet (0.05 peak)
+  Highpass 1800Hz
+  Reverb: 0.3s, wet 8%
+  Feel: Idle clock, breathing UI
+
+subtleSweep:
+  Sine 500→1800Hz, 280ms
+  Very low volume (0.07 peak)
+  Lowpass 2000Hz (keeps it smooth)
+  Reverb: 0.8s, wet 28%
+  Feel: Gentle transition, Apple-style morph
+
+═══════════════════════════════════════════════════════
+MOTION → SOUND MAPPING OBJECT
+═══════════════════════════════════════════════════════
+
+After all sounds, export this mapping:
+
+const motionSoundMap = {
+  fadeIn:      (ctx) => sounds.airyWhoosh(ctx),
+  slideIn:     (ctx) => sounds.swish(ctx),
+  slideOut:    (ctx) => sounds.swish(ctx),
+  cardPop:     (ctx) => sounds.lightPop(ctx),
+  cardReveal:  (ctx) => sounds.sweep(ctx),
+  buttonClick: (ctx) => sounds.softClick(ctx),
+  buttonHover: (ctx) => sounds.ambientTick(ctx),
+  success:     (ctx) => sounds.success(ctx),
+  error:       (ctx) => sounds.error(ctx),
+  bounce:      (ctx) => sounds.bounce(ctx),
+  impact:      (ctx) => sounds.impact(ctx),
+  zoomIn:      (ctx) => sounds.sweep(ctx),
+  zoomOut:     (ctx) => sounds.whoosh(ctx),
+  morph:       (ctx) => sounds.subtleSweep(ctx),
+  notification:(ctx) => sounds.notification(ctx),
+  confirm:     (ctx) => sounds.confirm(ctx),
+  tap:         (ctx) => sounds.glassTap(ctx),
+  drop:        (ctx) => sounds.drop(ctx),
+  snap:        (ctx) => sounds.snap(ctx),
+  flyby:       (ctx) => sounds.flyby(ctx),
+  screenShake: (ctx) => sounds.punch(ctx),
+  impactFlash: (ctx) => sounds.impact(ctx),
+};
+
+═══════════════════════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════════════════════
+
+Output a single self-contained HTML file with:
+1. All helper functions (createReverb, createCompressor, createDistortion,
+   createPinkNoise, adsr, stereoChorus)
+2. All 27 sound functions inside const sounds = { ... }
+3. motionSoundMap object
+4. A clean test UI: grid of buttons, one per sound,
+   click to play. Show sound name + category.
+   Dark background (#0a0a0f), lime accent (#a3e635),
+   Inter font from Google Fonts.
+5. Global AudioContext: lazy init on first click
+   (browser autoplay policy compliance)
+6. Export at bottom:
+   window.SoundLibrary = { sounds, motionSoundMap };
+   So it can be embedded in other projects.
+
+The output must be copy-paste ready, zero dependencies,
+works in any modern browser.
+Start immediately. Write the complete file.
